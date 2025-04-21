@@ -1,0 +1,48 @@
+:root {
+    --primary-color: #4a6fa5;
+    --primary-dark: #3a5a80;
+    --secondary-color: #166088;
+    --accent-color: #4fc3f7;
+    --light-color: #f8f9fa;
+    --dark-color: #343a40;
+    --gray-light: #e9ecef;
+    --gray-medium: #ced4da;
+    --danger-color: #dc3545;
+    --warning-color: #ffc107;
+    --success-color: #28a745;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background-color: var(--light-color);
+    color: var(--dark-color);
+    line-height: 1.6;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background-image: linear-gradient(rgba(255,255,255,0.95), rgba(255,255,255,0.95)),
+    url('https://images.unsplash.com/photo-1507842217343-583bb7270b66?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+}
+
+:root {
+    --primary-color: #4a6fa5;
+    --primary-dark: #3a5a80;
+    --secondary-color: #166088;
+    --accent-color: #4fc3f7;
+    --light-color: #f8f9fa;
+    --dark-color: #343a40;
+    --gray-light: #e9ecef;
+    --gray-medium: #ced4da;
+    --danger-color: #dc3545;
+    --warning-color: #ffc107;
+    --success-color: #28a745;
+}

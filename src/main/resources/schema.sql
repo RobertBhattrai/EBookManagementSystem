@@ -1,41 +1,86 @@
 -- Create Database
-CREATE DATABASE IF NOT EXISTS ebook_db;
-USE ebook_db;
+CREATE DATABASE IF NOT EXISTS ebook_database;
+USE ebook_database;
 
--- Table: users
-CREATE TABLE users (
-                       user_id INT PRIMARY KEY AUTO_INCREMENT,
-                       name VARCHAR(100),
-                       email VARCHAR(100) UNIQUE,
-                       contact VARCHAR(20),
-                       password VARCHAR(100),
-                       address TEXT,
-                       landmark VARCHAR(100),
-                       city VARCHAR(100),
-                       state VARCHAR(100),
-                       role ENUM('user', 'admin') DEFAULT 'user'
+CREATE TABLE IF NOT EXISTS `User` (
+                                      id INT PRIMARY KEY AUTO_INCREMENT,
+                                      name VARCHAR(50) NOT NULL,
+                                      email VARCHAR(50) UNIQUE NOT NULL,
+                                      phone VARCHAR(20),
+                                      address TEXT,
+                                      username VARCHAR(50) UNIQUE NOT NULL,
+                                      password VARCHAR(50) NOT NULL,
+                                      role ENUM('admin', 'user') DEFAULT 'user',
+                                      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Table: books
-CREATE TABLE books (
-                       book_id INT PRIMARY KEY AUTO_INCREMENT,
-                       book_name VARCHAR(200),
-                       author VARCHAR(100),
-                       price DECIMAL(10,2),
-                       category VARCHAR(100),
-                       status ENUM('available', 'sold', 'removed') DEFAULT 'available',
-                       photo VARCHAR(255),
-                       uploaded_by INT,
-                       FOREIGN KEY (uploaded_by) REFERENCES users(user_id)
+CREATE TABLE IF NOT EXISTS `book` (
+                                      `bookId` int NOT NULL AUTO_INCREMENT,
+                                      `bookName` varchar(100) NOT NULL,
+                                      `authorName` varchar(100) NOT NULL,
+                                      `price` int NOT NULL,
+                                      `bookCategory` varchar(10) NOT NULL,
+                                      `available` int NOT NULL,
+                                      `photo` varchar(50) NOT NULL,
+                                      PRIMARY KEY (`bookId`)
 );
 
--- Table: cart
-CREATE TABLE cart (
-                      cart_id INT PRIMARY KEY AUTO_INCREMENT,
-                      user_id INT,
-                      book_id INT,
-                      quantity INT DEFAULT 1,
-                      total_price DECIMAL(10,2),
-                      FOREIGN KEY (user_id) REFERENCES users(user_id),
-                      FOREIGN KEY (book_id) REFERENCES books(book_id)
+CREATE TABLE IF NOT EXISTS `cart` (
+                                      `id` int NOT NULL AUTO_INCREMENT,
+                                      `userId` int NOT NULL,
+                                      `bookId` int NOT NULL,
+                                      `quantity` int NOT NULL DEFAULT '1',
+                                      PRIMARY KEY (`id`),
+                                      KEY `bookIdCart` (`bookId`),
+                                      KEY `userIdCart` (`userId`),
+                                      CONSTRAINT `bookIdCart` FOREIGN KEY (`bookId`) REFERENCES `book` (`bookId`) ON DELETE CASCADE ON UPDATE CASCADE,
+                                      CONSTRAINT `userIdCart` FOREIGN KEY (`userId`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS `orderlist` (
+                             `orderId` int NOT NULL AUTO_INCREMENT,
+                             `userId` int NOT NULL,
+                             `time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                             `price` int NOT NULL,
+                             `paymentMethod` varchar(10) NOT NULL,
+                             `status` varchar(10) NOT NULL DEFAULT 'No',
+                             `name` varchar(30) DEFAULT NULL,
+                             `phone` varchar(20) DEFAULT NULL,
+                             `address1` varchar(30) DEFAULT NULL,
+                             `address2` varchar(30) DEFAULT NULL,
+                             `landmark` varchar(30) DEFAULT NULL,
+                             `city` varchar(30) DEFAULT NULL,
+                             `pincode` varchar(20) DEFAULT NULL,
+                             PRIMARY KEY (`orderId`),
+                             KEY `orderUserId` (`userId`),
+                             CONSTRAINT `orderUserId` FOREIGN KEY (`userId`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS `ordercart` (
+                                           `id` int NOT NULL AUTO_INCREMENT,
+                                           `orderId` int NOT NULL,
+                                           `bookName` varchar(100) NOT NULL,
+                                           `authorName` varchar(100) NOT NULL,
+                                           `quantity` int NOT NULL,
+                                           `price` int NOT NULL,
+                                           PRIMARY KEY (`id`),
+                                           KEY `cartOrderId` (`orderId`),
+                                           CONSTRAINT `cartOrderId` FOREIGN KEY (`orderId`) REFERENCES `orderlist` (`orderId`) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+
+
+CREATE TABLE IF NOT EXISTS `shipping` (
+                            `id` int NOT NULL AUTO_INCREMENT,
+                            `userId` int NOT NULL,
+                            `name` varchar(30) DEFAULT NULL,
+                            `phone` varchar(20) DEFAULT NULL,
+                            `address1` varchar(30) DEFAULT NULL,
+                            `address2` varchar(30) DEFAULT NULL,
+                            `landmark` varchar(30) DEFAULT NULL,
+                            `city` varchar(30) DEFAULT NULL,
+                            `pincode` varchar(20) DEFAULT NULL,
+                            PRIMARY KEY (`id`),
+                            KEY `shipUserId` (`userId`),
+                            CONSTRAINT `shipUserId` FOREIGN KEY (`userId`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 );

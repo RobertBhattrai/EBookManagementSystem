@@ -1,4 +1,4 @@
-package model;
+package models;
 
 public class Book {
     private int bookId;
@@ -9,6 +9,17 @@ public class Book {
     private String status;
     private String photo;
     private int uploadedBy; // FK to User
+
+    public Book(int bookId, String bookName, double price, String author, String category, String status, String photo, int uploadedBy) {
+        this.bookId = bookId;
+        this.bookName = bookName;
+        this.price = price;
+        this.author = author;
+        this.category = category;
+        this.status = status;
+        this.photo = photo;
+        this.uploadedBy = uploadedBy;
+    }
 
     // Getters and Setters
     public int getBookId() { return bookId; }
