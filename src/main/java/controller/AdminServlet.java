@@ -15,19 +15,20 @@ public class AdminServlet extends HttpServlet {
         // Check if user is logged in
         HttpSession session = request.getSession(false); // false = don't create new session
         if (session == null || session.getAttribute("loggedIn") == null || !(Boolean) session.getAttribute("loggedIn")) {
-            response.sendRedirect(request.getContextPath() + "/login");
+            response.sendRedirect(request.getContextPath() + "/LoginServlet");
             return;
         }
 
         // Optional: Check if user is admin
-        UserModel user = (UserModel) session.getAttribute("user");
+        UserModel user = (UserModel) session.getAttribute("loggedInUser");
         if (user == null || !"admin".equalsIgnoreCase(user.getRole())) {
-            response.sendRedirect(request.getContextPath() + "/unauthorized.jsp");
+            request.getSession().invalidate();
+            request.getRequestDispatcher("/WEB-INF/view/unauthorized.jsp").forward(request, response);
             return;
         }
 
         // Forward to admin dashboard JSP
-        request.getRequestDispatcher("/WEB-INF/view/adminDashboard.jsp").forward(request, response);
+        request.getRequestDispatcher("/WEB-INF/view/admin/home.jsp").forward(request, response);
     }
 
     @Override

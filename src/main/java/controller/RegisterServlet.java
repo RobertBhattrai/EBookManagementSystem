@@ -88,8 +88,11 @@ public class RegisterServlet extends HttpServlet {
         UserModel newUser = new UserModel(name, email, phone, address, username, hashedPassword, role);
         int userId = UserDAO.addUser(newUser);
 
+//        Creating Session
+        HttpSession session = request.getSession();
+
         if (userId > 0) {
-            request.getSession().setAttribute("registrationSuccess", "Registration successful! Please login.");
+            session.setAttribute("registrationSuccess", "Registration successful! Please login.");
             response.sendRedirect(request.getContextPath() + "/LoginServlet");
         } else {
             request.setAttribute("error", "Registration failed. Username or email may already be in use.");

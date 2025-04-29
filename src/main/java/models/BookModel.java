@@ -1,6 +1,6 @@
 package models;
 
-public class Book {
+public class BookModel {
     private int bookId;
     private String bookName;
     private String author;
@@ -10,7 +10,7 @@ public class Book {
     private String photo;
     private int uploadedBy; // FK to User
 
-    public Book(int bookId, String bookName, double price, String author, String category, String status, String photo, int uploadedBy) {
+    public BookModel(int bookId, String bookName, double price, String author, String category, String status, String photo, int uploadedBy) {
         this.bookId = bookId;
         this.bookName = bookName;
         this.price = price;
@@ -19,6 +19,12 @@ public class Book {
         this.status = status;
         this.photo = photo;
         this.uploadedBy = uploadedBy;
+    }
+
+    public BookModel() {}
+
+    public BookModel(String bookName, double price, String author, String category, String status, String photo, int uploadedBy) {
+        this(0, bookName, price, author, category, status, photo, uploadedBy);
     }
 
     // Getters and Setters

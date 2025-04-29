@@ -18,6 +18,8 @@ public class LoginServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // Check if user is already logged in via remember me cookie
         Cookie[] cookies = request.getCookies();
+
+
         if (cookies != null) {
             for (Cookie cookie : cookies) {
                 if (REMEMBER_ME_COOKIE_NAME.equals(cookie.getName())) {
@@ -32,6 +34,8 @@ public class LoginServlet extends HttpServlet {
                             HttpSession session = request.getSession();
                             session.setAttribute("user", user);
                             session.setAttribute("loggedIn", true);
+                            session.setAttribute("username", user.getUsername());
+
 
                             // Redirect based on role
                             String role = user.getRole(); // Ensure this method exists in UserModel
@@ -46,6 +50,7 @@ public class LoginServlet extends HttpServlet {
                 }
             }
         }
+
 
         // Check for registration success message
         String registrationSuccess = (String) request.getSession().getAttribute("registrationSuccess");
@@ -83,8 +88,9 @@ public class LoginServlet extends HttpServlet {
         if (user != null) {
             // Login success: create session
             HttpSession session = request.getSession();
-            session.setAttribute("user", user);
+            session.setAttribute("loggedInUser", user);
             session.setAttribute("loggedIn", true);
+            session.setAttribute("username", user.getUsername());
 
             // Handle Remember Me
             if ("on".equals(rememberMe)) {

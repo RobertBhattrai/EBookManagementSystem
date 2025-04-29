@@ -15,19 +15,20 @@ public class UserServlet extends HttpServlet {
         // Session check
         HttpSession session = request.getSession(false);
         if (session == null || session.getAttribute("loggedIn") == null || !(Boolean) session.getAttribute("loggedIn")) {
-            response.sendRedirect(request.getContextPath() + "/login");
+            response.sendRedirect(request.getContextPath() + "/LoginServlet");
             return;
         }
 
         // Role check
-        UserModel user = (UserModel) session.getAttribute("user");
+        UserModel user = (UserModel) session.getAttribute("loggedInUser");
         if (user == null || !"user".equalsIgnoreCase(user.getRole())) {
-            response.sendRedirect(request.getContextPath() + "/unauthorized.jsp");
+            request.getSession().invalidate();
+            request.getRequestDispatcher("/WEB-INF/view/unauthorized.jsp").forward(request, response);
             return;
         }
 
         // Forward to user dashboard JSP
-        request.getRequestDispatcher("/WEB-INF/view/userDashboard.jsp").forward(request, response);
+        request.getRequestDispatcher("/WEB-INF/view/home.jsp").forward(request, response);
     }
 
     @Override
