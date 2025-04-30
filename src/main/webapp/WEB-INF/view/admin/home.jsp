@@ -150,14 +150,14 @@
         </a>
 
         <!-- View All Books Card -->
-        <a href="${pageContext.request.contextPath}/all-books" class="action-card view-books">
+        <a href="${pageContext.request.contextPath}/ViewAllBook" class="action-card view-books">
             <div class="card-icon"><i class="fas fa-book-open"></i></div>
             <h3 class="card-title">View All Books</h3>
             <p class="card-desc">Browse and manage all books</p>
         </a>
 
         <!-- View Users Card -->
-        <a href="${pageContext.request.contextPath}/users" class="action-card view-users">
+        <a href="${pageContext.request.contextPath}/ViewUserServlet" class="action-card view-users">
             <div class="card-icon"><i class="fas fa-users"></i></div>
             <h3 class="card-title">View Users</h3>
             <p class="card-desc">Manage registered users</p>

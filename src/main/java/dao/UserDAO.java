@@ -4,6 +4,8 @@ import utils.PasswordHash;
 import models.UserModel;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -218,5 +220,51 @@ public class UserDAO {
         }
         return false;
     }
+
+    // Delete User by ID
+    public static boolean deleteUser(int userId) {
+        String query = "DELETE FROM User WHERE id = ?";
+
+        try (Connection conn = getConnection();
+             PreparedStatement ps = conn.prepareStatement(query)) {
+
+            ps.setInt(1, userId);
+            int affectedRows = ps.executeUpdate();
+            return affectedRows > 0;
+
+        } catch (SQLException e) {
+            System.err.println("Error deleting user: " + e.getMessage());
+            return false;
+        }
+    }
+
+
+    public static List<UserModel> getAllUsers() {
+        List<UserModel> users = new ArrayList<>();
+        String query = "SELECT * FROM User";
+
+        try (Connection connection = getConnection();
+             Statement stmt = connection.createStatement();
+             ResultSet rs = stmt.executeQuery(query)) {
+
+            while (rs.next()) {
+                UserModel user = new UserModel();
+                user.setId(rs.getInt("id"));
+                user.setName(rs.getString("name"));
+                user.setEmail(rs.getString("email"));
+                user.setPhone(rs.getString("phone"));
+                user.setAddress(rs.getString("address"));
+                user.setUsername(rs.getString("username"));
+//                user.setPassword(rs.getString("password")); // Optional
+                user.setRole(rs.getString("role"));
+
+                users.add(user);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Error getting all users", e);
+        }
+        return users;
+    }
+
 }
 

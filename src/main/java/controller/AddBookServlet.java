@@ -91,7 +91,7 @@ public class AddBookServlet extends HttpServlet {
         try {
             int bookId = BookDAO.addBook(book);
             if (bookId > 0) {
-                response.sendRedirect("adminBooks.jsp?success=Book added successfully");
+                response.sendRedirect(request.getContextPath() + "/ViewAllBook");
             } else {
                 // Clean up uploaded file if database operation failed
                 if (fileName != null) {

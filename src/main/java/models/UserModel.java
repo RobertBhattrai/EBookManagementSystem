@@ -23,6 +23,8 @@ public class UserModel {
         this.role = role;
     }
 
+    public UserModel() {}
+
     // Constructor without ID (defaults to 0)
     public UserModel(String name, String email, String phone, String address, String username, String password, String role) {
         this(0, name, email, phone, address, username, password, role);
