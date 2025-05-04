@@ -329,6 +329,7 @@
 </head>
 <body>
 <!-- Navigation Bar -->
+<%--<%@include file="../component/navbar.jsp"%>--%>
 <nav class="navbar">
     <a href="${pageContext.request.contextPath}/user" class="brand">
         <span class="brand-logo"><i class="fas fa-book-reader"></i></span>

@@ -128,6 +128,24 @@ public class BookDAO {
         }
     }
 
+
+    // Update Book
+    public static boolean updateBookQuantity(BookModel book, String quantity) {
+        String query = "UPDATE book SET  available = ? WHERE bookId = ?";
+
+        try (Connection connection = getConnection();
+             PreparedStatement ps = connection.prepareStatement(query)) {
+
+            ps.setString(1, quantity);;
+            ps.setInt(2, book.getBookId());
+
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            throw new RuntimeException("Error updating book", e);
+        }
+    }
+
+
     // Delete Book
     public static boolean deleteBook(int bookId) {
         String query = "DELETE FROM book WHERE bookId = ?";

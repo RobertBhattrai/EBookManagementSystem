@@ -164,7 +164,7 @@
         </a>
 
         <!-- View Book Orders Card -->
-        <a href="${pageContext.request.contextPath}/orders" class="action-card view-orders">
+        <a href="${pageContext.request.contextPath}/AdminOrderServlet" class="action-card view-orders">
             <div class="card-icon"><i class="fas fa-shopping-cart"></i></div>
             <h3 class="card-title">View Book Orders</h3>
             <p class="card-desc">View and manage customer orders</p>

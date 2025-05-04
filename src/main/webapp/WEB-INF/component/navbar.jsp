@@ -107,7 +107,6 @@
     </style>
 </head>
 <body>
-<body>
 <!-- Navigation Bar -->
 <nav class="navbar">
     <a href="home.jsp" class="brand">
@@ -138,9 +137,12 @@
         </li>
     </ul>
 
+    <!-- In your navbar section -->
     <div class="user-profile">
         <% if (loggedInUser != null) { %>
-        <span><i class="fas fa-user"></i> <%= loggedInUser.getName() %></span>
+        <a href="ProfileServlet" class="nav-link">
+            <i class="fas fa-user"></i> <%= loggedInUser.getName() %>
+        </a>
         <a href="LogoutServlet" class="nav-link" style="margin-left: 1rem;">
             <i class="fas fa-sign-out-alt"></i> Logout
         </a>

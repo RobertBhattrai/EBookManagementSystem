@@ -133,13 +133,12 @@ public class UserDAO {
 
     // Update User Info (name, phone, address, password)
     public static boolean updateUser(UserModel user) {
-        String query = "UPDATE User SET password = ?, name = ?, phone = ?, address = ? WHERE id = ?";
+        String query = "UPDATE User SET username = ?, name = ?, phone = ?, address = ? WHERE id = ?";
 
         try (Connection conn = getConnection();
              PreparedStatement ps = conn.prepareStatement(query)) {
 
-            String hashedPassword = PasswordHash.hashPassword(user.getPassword());
-            ps.setString(1, hashedPassword);
+            ps.setString(1, user.getUsername());
             ps.setString(2, user.getName());
             ps.setString(3, user.getPhone());
             ps.setString(4, user.getAddress());
@@ -186,7 +185,7 @@ public class UserDAO {
         return false;
     }
 
-    // Delete user after verifying password
+    // Delete user after verifying password (For self User)
     public static boolean deleteUser(String emailOrUsername, String password) {
         String queryCheck = "SELECT id, password FROM User WHERE email = ? OR username = ?";
         String queryDelete = "DELETE FROM User WHERE id = ?";
@@ -221,7 +220,7 @@ public class UserDAO {
         return false;
     }
 
-    // Delete User by ID
+    // Delete User by ID (For Admin)
     public static boolean deleteUser(int userId) {
         String query = "DELETE FROM User WHERE id = ?";
 
