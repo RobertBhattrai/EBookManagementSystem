@@ -113,7 +113,7 @@ public class CheckoutServlet extends HttpServlet {
                 for (int i = 0; i < bookIds.length; i++) {
                     OrderCartModel orderCart = new OrderCartModel();
                     orderCart.setOrderId(orderId);
-//                    orderCart.setBookId(Integer.parseInt(bookIds[i]));
+                    orderCart.setBookId(Integer.parseInt(bookIds[i]));
                     orderCart.setBookName(bookNames[i]);
                     orderCart.setAuthorName(authorNames[i]);
                     orderCart.setQuantity(Integer.parseInt(quantities[i]));

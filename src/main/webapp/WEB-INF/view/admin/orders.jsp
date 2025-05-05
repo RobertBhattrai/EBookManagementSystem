@@ -47,17 +47,17 @@
     <h2 class="mb-4">Order Management</h2>
 
     <% if (successMessage != null) { %>
-        <div class="alert alert-success alert-dismissible fade show">
-            <i class="fas fa-check-circle me-2"></i> <%= successMessage %>
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-        </div>
+    <div class="alert alert-success alert-dismissible fade show">
+        <i class="fas fa-check-circle me-2"></i> <%= successMessage %>
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
     <% } %>
 
     <% if (errorMessage != null) { %>
-        <div class="alert alert-danger alert-dismissible fade show">
-            <i class="fas fa-exclamation-circle me-2"></i> <%= errorMessage %>
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-        </div>
+    <div class="alert alert-danger alert-dismissible fade show">
+        <i class="fas fa-exclamation-circle me-2"></i> <%= errorMessage %>
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
     <% } %>
 
     <div class="card search-box">
@@ -79,66 +79,70 @@
     <div class="table-responsive">
         <table class="table table-striped table-hover">
             <thead class="table-dark">
-                <tr>
-                    <th>ID</th>
-                    <th>Order ID</th>
-                    <th>Book Name</th>
-                    <th>Author Name</th>
-                    <th>Quantity</th>
-                    <th>Price</th>
-                    <th>Actions</th>
-                </tr>
+            <tr>
+                <th>ID</th>
+                <th>Order ID</th>
+                <th>Book Name</th>
+                <th>Author Name</th>
+                <th>Quantity</th>
+                <th>Price</th>
+                <th>Actions</th>
+            </tr>
             </thead>
             <tbody>
-            <% if (cartList != null && orders != null) {
+            <% if (cartList != null) {
                 for (OrderCartModel cart : cartList) {
                     for (OrderModel order : orders) {
-                        if (cart.getOrderId()==order.getOrderId()) {
+                        if (true) {
             %>
-                <tr>
-                    <td><%= cart.getId() %></td>
-                    <td><%= cart.getOrderId() %></td>
-                    <td><%= cart.getBookName() %></td>
-                    <td><%= cart.getAuthorName() %></td>
-                    <td><%= cart.getQuantity() %></td>
-                    <td><%= cart.getPrice() %></td>
-                    <td class="action-buttons">
-                        <% if (order.getStatus().equalsIgnoreCase("Pending")) { %>
-                            <form action="AdminOrderServlet" method="post" class="d-inline">
-                                <input type="hidden" name="orderId" value="<%= order.getOrderId() %>">
-                                <input type="hidden" name="status" value="Processing">
-                                <button type="submit" class="btn btn-sm btn-success">
-                                    <i class="fas fa-check"></i> Process
-                                </button>
-                            </form>
-                            <form action="AdminOrderServlet" method="post" class="d-inline ms-1">
-                                <input type="hidden" name="orderId" value="<%= order.getOrderId() %>">
-                                <input type="hidden" name="status" value="Cancelled">
-                                <button type="submit" class="btn btn-sm btn-danger">
-                                    <i class="fas fa-times"></i> Cancel
-                                </button>
-                            </form>
-                        <% } else if (order.getStatus().equalsIgnoreCase("Processing")) { %>
-                            <form action="AdminOrderServlet" method="post" class="d-inline">
-                                <input type="hidden" name="orderId" value="<%= order.getOrderId() %>">
-                                <input type="hidden" name="status" value="Completed">
-                                <button type="submit" class="btn btn-sm btn-primary">
-                                    <i class="fas fa-check-circle"></i> Complete
-                                </button>
-                            </form>
-                        <% } %>
-                        <a href="AdminOrderDetailServlet?orderId=<%= order.getOrderId() %>" class="btn btn-sm btn-info ms-1">
-                            <i class="fas fa-eye"></i> Details
-                        </a>
-                    </td>
-                </tr>
+            <tr>
+                <td><%= cart.getId() %></td>
+                <td><%= cart.getOrderId() %></td>
+                <td><%= cart.getBookName() %></td>
+                <td><%= cart.getAuthorName() %></td>
+                <td><%= cart.getQuantity() %></td>
+                <td><%= cart.getPrice() %></td>
+                <td class="action-buttons">
+                    <% if (order.getStatus().equalsIgnoreCase("Pending")) { %>
+                    <form action="AdminOrderServlet" method="post" class="d-inline">
+                        <input type="hidden" name="orderId" value="<%= order.getOrderId() %>">
+                        <input type="hidden" name="bookId" value="<%= cart.getBookId()%>">
+                        <input type="hidden" name="bookName" value="<%= cart.getBookName()%>">
+                        <input type="hidden" name="OrderQuantity" value="<%= cart.getQuantity()%>">
+                        <input type="hidden" name="status" value="Processing">
+                        <button type="submit" class="btn btn-sm btn-success">
+                            <i class="fas fa-check"></i> Process
+                        </button>
+                    </form>
+                    <form action="AdminOrderServlet" method="post" class="d-inline ms-1">
+                        <input type="hidden" name="orderId" value="<%= order.getOrderId() %>">
+                        <input type="hidden" name="status" value="Cancelled">
+                        <button type="submit" class="btn btn-sm btn-danger">
+                            <i class="fas fa-times"></i> Cancel
+                        </button>
+                    </form>
+                    <% } else if (order.getStatus().equalsIgnoreCase("Processing")) { %>
+                    <form action="AdminOrderServlet" method="post" class="d-inline">
+                        <input type="hidden" name="orderId" value="<%= order.getOrderId() %>">
+                        <input type="hidden" name="status" value="Completed">
+                        <input type="hidden" name="currentStatus" value="<%= order.getStatus() %>">
+                        <button type="submit" class="btn btn-sm btn-primary">
+                            <i class="fas fa-check-circle"></i> Complete
+                        </button>
+                    </form>
+                    <% } %>
+                    <a href="AdminOrderDetailServlet?orderId=<%= order.getOrderId() %>" class="btn btn-sm btn-info ms-1">
+                        <i class="fas fa-eye"></i> Details
+                    </a>
+                </td>
+            </tr>
             <%       }
-                    }
-                }
+            }
+            }
             } else { %>
-                <tr>
-                    <td colspan="7" class="text-center text-muted">No orders found.</td>
-                </tr>
+            <tr>
+                <td colspan="7" class="text-center text-muted">No orders found.</td>
+            </tr>
             <% } %>
             </tbody>
         </table>

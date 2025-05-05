@@ -130,14 +130,30 @@ public class BookDAO {
 
 
     // Update Book
-    public static boolean updateBookQuantity(BookModel book, String quantity) {
+    public static boolean updateBookQuantity(BookModel book, int quantity) {
+        String query = "UPDATE book SET  available = ? WHERE bookId = ?";
+
+        try (Connection connection = getConnection();
+             PreparedStatement ps = connection.prepareStatement(query)) {
+
+            ps.setString(1, String.valueOf(quantity));;
+            ps.setInt(2, book.getBookId());
+
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            throw new RuntimeException("Error updating book", e);
+        }
+    }
+
+    // Update Book
+    public static boolean updateBookQuantities(int bookId, String quantity) {
         String query = "UPDATE book SET  available = ? WHERE bookId = ?";
 
         try (Connection connection = getConnection();
              PreparedStatement ps = connection.prepareStatement(query)) {
 
             ps.setString(1, quantity);;
-            ps.setInt(2, book.getBookId());
+            ps.setInt(2, bookId);
 
             return ps.executeUpdate() > 0;
         } catch (SQLException e) {
@@ -188,5 +204,32 @@ public class BookDAO {
             throw new RuntimeException("Error searching books", e);
         }
         return books;
+    }
+
+    // Get Book by Name
+    public static BookModel getBookByName(String bookName) {
+        String query = "SELECT * FROM book WHERE bookName = ?";
+
+        try (Connection connection = getConnection();
+             PreparedStatement ps = connection.prepareStatement(query)) {
+
+            ps.setString(1, bookName);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    BookModel book = new BookModel();
+                    book.setBookId(rs.getInt("bookId"));
+                    book.setBookName(rs.getString("bookName"));
+                    book.setAuthor(rs.getString("authorName"));
+                    book.setPrice(rs.getDouble("price"));
+                    book.setCategory(rs.getString("bookCategory"));
+                    book.setStatus(rs.getString("available"));
+                    book.setPhoto(rs.getString("photo"));
+                    return book;
+                }
+            }
+            return null;
+        } catch (SQLException e) {
+            throw new RuntimeException("Error retrieving book", e);
+        }
     }
 }

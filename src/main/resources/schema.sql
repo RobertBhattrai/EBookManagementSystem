@@ -59,12 +59,14 @@ CREATE TABLE IF NOT EXISTS `orderlist` (
 CREATE TABLE IF NOT EXISTS `ordercart` (
                                            `id` int NOT NULL AUTO_INCREMENT,
                                            `orderId` int NOT NULL,
+                                           `bookId` int NOT NULL,
                                            `bookName` varchar(100) NOT NULL,
                                            `authorName` varchar(100) NOT NULL,
                                            `quantity` int NOT NULL,
                                            `price` int NOT NULL,
                                            PRIMARY KEY (`id`),
                                            KEY `cartOrderId` (`orderId`),
+                                           CONSTRAINT `bookOrderCart` FOREIGN KEY (`bookId`) REFERENCES `book` (`bookId`) ON DELETE CASCADE ON UPDATE CASCADE,
                                            CONSTRAINT `cartOrderId` FOREIGN KEY (`orderId`) REFERENCES `orderlist` (`orderId`) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
