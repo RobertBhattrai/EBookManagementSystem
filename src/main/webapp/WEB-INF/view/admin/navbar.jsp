@@ -1,150 +1,330 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: bhatt
-  Date: 4/29/2025
-  Time: 10:22 PM
-  To change this template use File | Settings | File Templates.
---%>
+<%@ page import="models.UserModel" %>
+<%
+    UserModel loggedInUser = (UserModel) session.getAttribute("loggedInUser");
+    if (loggedInUser == null) {
+        response.sendRedirect(request.getContextPath() + "/LoginServlet");
+        return;
+    }
+%>
 <html>
 <head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/component/style.css">
     <meta charset="UTF-8">
-    <title>Admin Navigation</title>
     <style>
-        :root {
-            --primary-color: #2c3e50;
-            --secondary-color: #3498db;
-            --accent-color: #e74c3c;
-            --text-light: #ecf0f1;
-            --text-dark: #2c3e50;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-
+        /* Navbar Styles */
         .navbar {
-            background-color: var(--primary-color);
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
             display: flex;
             justify-content: space-between;
             align-items: center;
             padding: 0.8rem 2rem;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+
         }
 
         .brand {
             display: flex;
             align-items: center;
-            color: var(--text-light);
+            color: white;
             text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .brand:hover {
+            transform: translateY(-2px);
         }
 
         .brand-logo {
-            font-size: 1.8rem;
+            font-size: 2rem;
             margin-right: 0.8rem;
-            color: var(--secondary-color);
+            color: var(--accent);
         }
 
         .brand-text {
-            font-size: 1.5rem;
-            font-weight: 600;
+            font-size: 1.6rem;
+            font-weight: 700;
+            letter-spacing: -0.5px;
         }
 
         .nav-links {
             display: flex;
             list-style: none;
+            margin: 0;
+            padding: 0;
         }
 
         .nav-item {
-            margin-left: 1.5rem;
+            margin-left: 1.2rem;
             position: relative;
         }
 
         .nav-link {
-            color: var(--text-light);
+            color: white;
             text-decoration: none;
             font-size: 1rem;
             font-weight: 500;
-            padding: 0.5rem 0;
-            transition: color 0.3s ease;
+            padding: 0.8rem 0.5rem;
+            transition: var(--transition);
             display: flex;
             align-items: center;
-        }
-
-        .nav-link:hover {
-            color: var(--secondary-color);
+            position: relative;
         }
 
         .nav-link i {
-            margin-right: 0.5rem;
+            margin-right: 0.6rem;
             font-size: 1.1rem;
+            transition: var(--transition);
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 3px;
+            background-color: var(--accent);
+            transition: var(--transition);
+        }
+
+        .nav-link:hover {
+            color: var(--accent);
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        .nav-link:hover i {
+            transform: scale(1.1);
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            color: white;
+            text-decoration: none;
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .user-info:hover {
+            color: var(--accent);
+            transform: translateY(-2px);
+        }
+
+        .user-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            margin-right: 0.8rem;
+            object-fit: cover;
+            border: 2px solid var(--accent);
+            transition: var(--transition);
+        }
+
+        .user-info:hover .user-avatar {
+            transform: scale(1.1);
+            box-shadow: 0 0 0 3px rgba(72, 149, 239, 0.3);
+        }
+
+        .user-name {
+            font-weight: 500;
         }
 
         .logout-btn {
-            background-color: var(--accent-color);
+            background: rgba(255, 255, 255, 0.1);
             color: white;
             border: none;
-            padding: 0.5rem 1.2rem;
-            border-radius: 4px;
+            border-radius: 50px;
+            padding: 0.6rem 1.2rem;
+            font-size: 0.9rem;
             cursor: pointer;
-            font-weight: 500;
-            transition: background-color 0.3s ease;
+            transition: var(--transition);
             display: flex;
             align-items: center;
+            gap: 0.5rem;
         }
 
         .logout-btn:hover {
-            background-color: #c0392b;
+            background: rgba(255, 255, 255, 0.2);
+            color: var(--accent);
+            transform: translateY(-2px);
         }
 
-        .logout-btn i {
-            margin-right: 0.5rem;
+        /* Mobile Menu */
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
         }
 
-        /* Responsive design */
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            .navbar {
+                flex-wrap: wrap;
+                padding: 0.8rem 1.5rem;
+            }
+
+            .brand-text {
+                font-size: 1.4rem;
+            }
+        }
+
         @media (max-width: 768px) {
             .navbar {
-                flex-direction: column;
-                padding: 1rem;
+                position: relative;
+                padding: 0.8rem 1.5rem;
+            }
+
+            .menu-toggle {
+                display: block;
+                order: 1;
+            }
+
+            .brand {
+                order: 2;
+                flex-grow: 1;
+                justify-content: center;
+            }
+
+            .user-profile {
+                order: 3;
             }
 
             .nav-links {
-                margin-top: 1rem;
+                display: none;
+                flex-direction: column;
                 width: 100%;
-                justify-content: space-around;
+                background: rgba(0, 0, 0, 0.9);
+                position: absolute;
+                top: 100%;
+                left: 0;
+                padding: 1rem 0;
+                z-index: 999;
+                animation: slideDown 0.3s ease-out;
+            }
+
+            .nav-links.active {
+                display: flex;
             }
 
             .nav-item {
-                margin-left: 0;
+                margin: 0;
+                width: 100%;
+            }
+
+            .nav-link {
+                padding: 1rem 1.5rem;
+                justify-content: center;
+            }
+
+            .nav-link::after {
+                display: none;
+            }
+
+            .user-profile {
+                margin-left: auto;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .brand-text {
+                font-size: 1.2rem;
+            }
+
+            .user-name {
+                display: none;
+            }
+
+            .logout-btn span {
+                display: none;
+            }
+
+            .logout-btn {
+                padding: 0.6rem;
+                border-radius: 50%;
+            }
+        }
+
+        /* Animations */
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
             }
         }
     </style>
 </head>
 <body>
+<!-- Navigation Bar -->
 <nav class="navbar">
-    <a href="home.jsp" class="brand">
-        <span class="brand-text">eBook Admin</span>
+    <button class="menu-toggle" id="mobile-menu">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <a href="${pageContext.request.contextPath}/admin" class="brand">
+        <span class="brand-logo"><i class="fas fa-book-reader"></i></span>
+        <span class="brand-text">E-Book Haven - Admin</span>
     </a>
 
-    <ul class="nav-links">
+    <ul class="nav-links" id="nav-links">
         <li class="nav-item">
             <a href="${pageContext.request.contextPath}/admin" class="nav-link">
-                 Home
+                <i class="fas fa-home"></i> <span>Home</span>
             </a>
         </li>
         <li class="nav-item">
             <a href="${pageContext.request.contextPath}/" class="nav-link">
-                 Main Site
+                <i class="fas fa-book-open"></i> <span>Main Site</span>
             </a>
         </li>
-        <li class="nav-item">
-            <button class="logout-btn" onclick="window.location.href='${pageContext.request.contextPath}/LogoutServlet'">
-                Logout
-            </button>
-        </li>
     </ul>
+
+    <div class="user-profile">
+        <button class="logout-btn" onclick="window.location.href='${pageContext.request.contextPath}/LogoutServlet'">
+            <i class="fas fa-sign-out-alt"></i>
+            <span>Logout</span>
+        </button>
+    </div>
 </nav>
+
+<script>
+    // Mobile menu toggle
+    const mobileMenu = document.getElementById('mobile-menu');
+    const navLinks = document.getElementById('nav-links');
+
+    mobileMenu.addEventListener('click', () => {
+        navLinks.classList.toggle('active');
+        mobileMenu.innerHTML = navLinks.classList.contains('active') ?
+            '<i class="fas fa-times"></i>' : '<i class="fas fa-bars"></i>';
+    });
+
+    // Close menu when clicking outside
+    document.addEventListener('click', (e) => {
+        if (!e.target.closest('.navbar') && navLinks.classList.contains('active')) {
+            navLinks.classList.remove('active');
+            mobileMenu.innerHTML = '<i class="fas fa-bars"></i>';
+        }
+    });
+</script>
 </body>
 </html>

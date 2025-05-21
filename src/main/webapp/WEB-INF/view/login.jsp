@@ -4,162 +4,87 @@
 <head>
     <title>Login | E-Book Haven</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/component/style.css">
     <style>
-        :root {
-            --primary: #4361ee;
-            --secondary: #3f37c9;
-            --accent: #4895ef;
-            --dark: #1b263b;
-            --light: #f8f9fa;
-            --success: #4cc9f0;
-            --warning: #f8961e;
-            --danger: #f72585;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-
         body {
-            background-color: #f5f7ff;
+            background-color: var(--light);
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+            background-image: linear-gradient(rgba(67, 97, 238, 0.8), rgba(63, 55, 201, 0.8)),
             url('https://images.unsplash.com/photo-1507842217343-583bb7270b66?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
             background-size: cover;
             background-position: center;
+            background-blend-mode: overlay;
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
 
         .login-container {
             width: 100%;
             max-width: 450px;
             background: white;
-            border-radius: 10px;
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+            box-shadow: var(--box-shadow);
             overflow: hidden;
+            transform: translateY(0);
+            transition: var(--transition);
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        .login-container:hover {
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
         }
 
         .login-header {
             background: linear-gradient(135deg, var(--primary), var(--secondary));
             color: white;
             text-align: center;
-            padding: 2rem;
+            padding: 2.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .login-header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            transform: rotate(30deg);
         }
 
         .login-header i {
-            font-size: 2.5rem;
+            font-size: 3rem;
             margin-bottom: 1rem;
+            position: relative;
+            z-index: 1;
+            color: rgba(255,255,255,0.9);
         }
 
         .login-header h2 {
             margin-bottom: 0.5rem;
+            font-size: 1.8rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .login-header p {
+            opacity: 0.9;
+            position: relative;
+            z-index: 1;
         }
 
         .login-body {
-            padding: 2rem;
-        }
-
-        .alert {
-            padding: 1rem;
-            margin-bottom: 1.5rem;
-            border-radius: 5px;
-            font-size: 0.9rem;
-        }
-
-        .alert-success {
-            background-color: #d4edda;
-            color: #155724;
-            border: 1px solid #c3e6cb;
-        }
-
-        .alert-danger {
-            background-color: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
-        }
-
-        .form-group {
-            margin-bottom: 1.5rem;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 0.5rem;
-            font-weight: 500;
-            color: var(--dark);
-        }
-
-        input[type="text"],
-        input[type="password"] {
-            width: 100%;
-            padding: 0.8rem 1rem;
-            border: 1px solid #ced4da;
-            border-radius: 5px;
-            font-size: 1rem;
-            transition: all 0.3s;
-        }
-
-        input:focus {
-            outline: none;
-            border-color: var(--accent);
-            box-shadow: 0 0 0 3px rgba(72, 149, 239, 0.2);
-        }
-
-        .remember-me {
-            display: flex;
-            align-items: center;
-            margin-bottom: 1.5rem;
-        }
-
-        .remember-me input {
-            margin-right: 0.5rem;
-        }
-
-        .btn {
-            display: inline-block;
-            padding: 0.8rem 1.5rem;
-            border: none;
-            border-radius: 5px;
-            font-size: 1rem;
-            font-weight: 500;
-            text-align: center;
-            text-decoration: none;
-            cursor: pointer;
-            transition: all 0.3s;
-            width: 100%;
-        }
-
-        .btn-primary {
-            background-color: var(--primary);
-            color: white;
-        }
-
-        .btn-primary:hover {
-            background-color: var(--secondary);
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-        }
-
-        .login-footer {
-            text-align: center;
-            margin-top: 1.5rem;
-            padding-top: 1.5rem;
-            border-top: 1px solid #eee;
-        }
-
-        .login-footer a {
-            color: var(--primary);
-            font-weight: 500;
-            text-decoration: none;
-        }
-
-        .login-footer a:hover {
-            text-decoration: underline;
+            padding: 2.5rem;
         }
 
         .password-toggle {
@@ -172,20 +97,66 @@
             top: 50%;
             transform: translateY(-50%);
             cursor: pointer;
-            color: #666;
+            color: var(--text-light);
+            transition: var(--transition);
         }
 
+        .password-toggle i:hover {
+            color: var(--primary);
+        }
+
+        .remember-me {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .remember-me input {
+            margin-right: 0.5rem;
+            accent-color: var(--primary);
+        }
+
+        .remember-me label {
+            margin-bottom: 0;
+            color: var(--text);
+        }
+
+        .login-footer {
+            text-align: center;
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .login-footer p {
+            margin-bottom: 0.8rem;
+            color: var(--text-light);
+        }
+
+        .login-footer a {
+            color: var(--primary);
+            font-weight: 500;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .login-footer a:hover {
+            color: var(--secondary);
+            text-decoration: underline;
+        }
+
+        /* Responsive */
         @media (max-width: 576px) {
             .login-container {
-                margin: 1rem;
+                margin: 1.5rem;
             }
 
             .login-header {
-                padding: 1.5rem;
+                padding: 2rem;
             }
 
             .login-body {
-                padding: 1.5rem;
+                padding: 2rem;
             }
         }
     </style>
@@ -202,26 +173,26 @@
         <!-- Display registration success message if available -->
         <% if (request.getAttribute("registrationSuccess") != null) { %>
         <div class="alert alert-success">
-            <%= request.getAttribute("registrationSuccess") %>
+            <i class="fas fa-check-circle"></i> <%= request.getAttribute("registrationSuccess") %>
         </div>
         <% } %>
 
         <!-- Display error message if login fails -->
         <% if (request.getAttribute("error") != null) { %>
         <div class="alert alert-danger">
-            <%= request.getAttribute("error") %>
+            <i class="fas fa-exclamation-circle"></i> <%= request.getAttribute("error") %>
         </div>
         <% } %>
 
         <form action="LoginServlet" method="post">
             <div class="form-group">
                 <label for="username">Username or Email</label>
-                <input type="text" id="username" name="username" required>
+                <input type="text" id="username" name="username" required placeholder="Enter your username or email">
             </div>
 
             <div class="form-group password-toggle">
                 <label for="password">Password</label>
-                <input type="password" id="password" name="password" required>
+                <input type="password" id="password" name="password" required placeholder="Enter your password">
                 <i class="fas fa-eye" id="togglePassword"></i>
             </div>
 
@@ -236,8 +207,8 @@
         </form>
 
         <div class="login-footer">
-            <p>Don't have an account? <a href="RegisterServlet">Register here</a></p>
-            <p><a href="#">Forgot your password?</a></p>
+            <p>Don't have an account? <a href="${pageContext.request.contextPath}/RegisterServlet">Register here</a></p>
+            <p><a href="">Forgot your password?</a></p>
         </div>
     </div>
 </div>
@@ -250,10 +221,11 @@
     togglePassword.addEventListener('click', function() {
         const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
         password.setAttribute('type', type);
+        this.classList.toggle('fa-eye');
         this.classList.toggle('fa-eye-slash');
     });
 
-    // Auto-fill username if available in cookie
+    // Autofill username if available in cookie
     document.addEventListener('DOMContentLoaded', function() {
         const cookies = document.cookie.split(';');
         for (let cookie of cookies) {

@@ -1,434 +1,544 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: bhatt
-  Date: 4/30/2025
-  Time: 3:38 PM
-  To change this template use File | Settings | File Templates.
---%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="models.BookModel" %>
 <%@ page import="models.UserModel" %>
 <%@ page import="java.util.List" %>
 <%
-    UserModel loggedInUser = (UserModel) session.getAttribute("loggedInUser");
-    if (loggedInUser == null) {
-        response.sendRedirect(request.getContextPath() + "/LoginServlet");
-        return;
-    }
-
     List<BookModel> books = (List<BookModel>) request.getAttribute("books");
     String searchQuery = request.getParameter("search") != null ? request.getParameter("search") : "";
 %>
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Browse Books - eBook Store</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <title>Browse Books - E-Book Haven</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/component/style.css">
     <style>
-        :root {
-            --primary-color: #3498db;
-            --secondary-color: #2ecc71;
-            --accent-color: #e74c3c;
-            --dark-color: #2c3e50;
-            --light-color: #ecf0f1;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-
         body {
-            background-color: #f5f5f5;
+            background-color: var(--light);
         }
 
-        /* Navigation Bar - Same as home.jsp */
-        .navbar {
-            background-color: var(--dark-color);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1rem 2rem;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        }
-
-        /* ... (include all navbar styles from home.jsp) ... */
-
-        .container {
-            max-width: 1200px;
+        .main-container {
+            max-width: 1400px;
             margin: 2rem auto;
-            padding: 0 1rem;
+            padding: 0 1.5rem;
         }
 
+        /* Page Header */
         .page-header {
             text-align: center;
-            margin-bottom: 2rem;
+            margin-bottom: 3rem;
         }
 
         .page-header h1 {
-            color: var(--dark-color);
-            margin-bottom: 0.5rem;
+            font-size: 2.5rem;
+            color: var(--dark);
+            margin-bottom: 1rem;
+            font-weight: 600;
+            position: relative;
+            display: inline-block;
         }
 
-        .search-bar {
+        .page-header h1::after {
+            content: '';
+            position: absolute;
+            width: 80px;
+            height: 4px;
+            background: var(--accent);
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-radius: 2px;
+        }
+
+        .page-header p {
+            color: var(--text-light);
+            font-size: 1.1rem;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        /* Search Bar */
+        .search-container {
+            max-width: 700px;
+            margin: 0 auto 3rem;
+            position: relative;
+        }
+
+        .search-form {
             display: flex;
-            margin-bottom: 2rem;
-            max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
+            position: relative;
         }
 
         .search-input {
             flex: 1;
-            padding: 0.75rem 1rem;
-            border: 1px solid #ddd;
-            border-radius: 4px 0 0 4px;
+            padding: 1rem 1.5rem;
+            border: 2px solid rgba(67, 97, 238, 0.2);
+            border-radius: 50px;
             font-size: 1rem;
+            transition: var(--transition);
+            padding-right: 4rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 4px rgba(72, 149, 239, 0.2);
         }
 
         .search-button {
-            padding: 0 1.5rem;
-            background-color: var(--primary-color);
+            position: absolute;
+            right: 5px;
+            top: 5px;
+            bottom: 5px;
+            width: 50px;
+            background: var(--primary);
             color: white;
             border: none;
-            border-radius: 0 4px 4px 0;
+            border-radius: 50%;
             cursor: pointer;
-            transition: background-color 0.3s ease;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .search-button:hover {
-            background-color: #2980b9;
+            background: var(--primary-light);
+            transform: scale(1.05);
         }
 
+        /* Filter Section */
+        .filter-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .filter-group {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .filter-label {
+            font-weight: 500;
+            color: var(--dark);
+        }
+
+        .filter-select {
+            padding: 0.6rem 1rem;
+            border: 2px solid rgba(67, 97, 238, 0.2);
+            border-radius: 6px;
+            font-size: 0.9rem;
+            transition: var(--transition);
+            cursor: pointer;
+        }
+
+        .filter-select:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+
+        .view-toggle {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .view-btn {
+            background: white;
+            border: 2px solid rgba(67, 97, 238, 0.2);
+            border-radius: 6px;
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .view-btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .view-btn:hover {
+            border-color: var(--accent);
+        }
+
+        /* Books Grid */
         .books-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 1.5rem;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 2rem;
         }
 
         .book-card {
             background: white;
-            border-radius: 8px;
+            border-radius: var(--border-radius);
             overflow: hidden;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s ease;
+            box-shadow: var(--box-shadow);
+            transition: var(--transition);
+            opacity: 0;
+            transform: translateY(30px);
         }
 
         .book-card:hover {
-            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .book-image-container {
+            padding: 0.5rem;
+            height: 220px;
+            position: relative;
+            overflow: hidden;
         }
 
         .book-image {
             width: 100%;
-            height: 200px;
-            object-fit: cover;
-            border-bottom: 1px solid #eee;
+            height: 100%;
+            object-fit: contain;
+            transition: var(--transition);
+        }
+
+        .book-card:hover .book-image {
+            transform: scale(1.05);
+        }
+
+        .book-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: var(--accent);
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            z-index: 1;
         }
 
         .book-details {
-            padding: 1rem;
+            padding: 1.5rem;
         }
 
         .book-title {
-            font-size: 1.1rem;
+            font-size: 1.2rem;
             margin-bottom: 0.5rem;
-            color: var(--dark-color);
+            color: var(--dark);
             font-weight: 600;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         .book-author {
-            color: #7f8c8d;
-            margin-bottom: 0.5rem;
+            color: var(--text-light);
+            margin-bottom: 0.8rem;
             font-size: 0.9rem;
         }
 
         .book-price {
-            font-weight: bold;
-            color: var(--primary-color);
-            margin-bottom: 1rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 1.2rem;
+            font-size: 1.2rem;
         }
 
         .book-actions {
             display: flex;
             justify-content: space-between;
+            gap: 0.8rem;
         }
 
         .btn {
-            padding: 0.5rem 1rem;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
+            flex: 1;
+            padding: 0.7rem;
+            border-radius: 6px;
             font-weight: 500;
-            transition: all 0.3s ease;
-            text-decoration: none;
-            display: inline-block;
             text-align: center;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
         }
 
-        .btn-primary {
-            background-color: var(--primary-color);
+        .btn-details {
+            background: white;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+        }
+
+        .btn-details:hover {
+            background: var(--primary-light);
             color: white;
+            border-color: var(--primary-light);
         }
 
-        .btn-primary:hover {
-            background-color: #2980b9;
-        }
-
-        .btn-secondary {
-            background-color: var(--secondary-color);
+        .btn-cart {
+            background: var(--primary);
             color: white;
+            border: 2px solid var(--primary);
         }
 
-        .btn-secondary:hover {
-            background-color: #27ae60;
+        .btn-cart:hover {
+            background: var(--primary-light);
+            border-color: var(--primary-light);
+            transform: translateY(-2px);
         }
 
+        /* No Books Message */
         .no-books {
             text-align: center;
-            padding: 2rem;
-            background-color: white;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 3rem;
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            margin: 2rem 0;
+            animation: fadeInUp 0.8s ease-out;
         }
 
-        .pagination {
-            display: flex;
-            justify-content: center;
-            margin-top: 2rem;
+        .no-books i {
+            font-size: 3rem;
+            color: var(--accent);
+            margin-bottom: 1.5rem;
         }
 
-        .pagination a {
-            padding: 0.5rem 1rem;
-            margin: 0 0.25rem;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            text-decoration: none;
-            color: var(--dark-color);
+        .no-books h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--dark);
         }
 
-        .pagination a.active {
-            background-color: var(--primary-color);
-            color: white;
-            border-color: var(--primary-color);
+        .no-books p {
+            color: var(--text-light);
+            margin-bottom: 1.5rem;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
         }
 
-        @media (max-width: 600px) {
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            .books-grid {
+                grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            }
+        }
+
+        @media (max-width: 768px) {
+            .filter-section {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .filter-group {
+                justify-content: space-between;
+            }
+
+            .page-header h1 {
+                font-size: 2rem;
+            }
+        }
+
+        @media (max-width: 576px) {
             .books-grid {
                 grid-template-columns: 1fr;
             }
 
-            .search-bar {
+            .book-actions {
                 flex-direction: column;
             }
 
-            .search-input {
-                border-radius: 4px;
-                margin-bottom: 0.5rem;
-            }
-
-            .search-button {
-                border-radius: 4px;
-                padding: 0.75rem;
-            }
-        }
-
-        /* Navigation Bar Styles */
-        .navbar {
-            background-color: var(--dark-color);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1rem 2rem;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        }
-
-        .brand {
-            display: flex;
-            align-items: center;
-            color: white;
-            text-decoration: none;
-        }
-
-        .brand-logo {
-            font-size: 1.8rem;
-            margin-right: 0.8rem;
-            color: var(--primary-color);
-        }
-
-        .brand-text {
-            font-size: 1.5rem;
-            font-weight: 600;
-        }
-
-        .nav-links {
-            display: flex;
-            list-style: none;
-        }
-
-        .nav-item {
-            margin-left: 1.5rem;
-        }
-
-        .nav-link {
-            color: white;
-            text-decoration: none;
-            font-size: 1rem;
-            font-weight: 500;
-            padding: 0.5rem 0;
-            transition: color 0.3s ease;
-            display: flex;
-            align-items: center;
-        }
-
-        .nav-link:hover {
-            color: var(--primary-color);
-        }
-
-        .nav-link i {
-            margin-right: 0.5rem;
-            font-size: 1.1rem;
-        }
-
-        /* Responsive Design */
-        @media (max-width: 768px) {
-            .navbar {
-                flex-direction: column;
-                padding: 1rem;
-            }
-
-            .nav-links {
-                margin-top: 1rem;
+            .btn {
                 width: 100%;
-                justify-content: space-around;
             }
 
-            .nav-item {
-                margin-left: 0;
+            .main-container {
+                padding: 0 1rem;
+            }
+
+            .page-header h1 {
+                font-size: 1.8rem;
             }
         }
-
-
-
-        .user-profile {
-            display: flex;
-            align-items: center;
-            color: white;
-        }
-
-        .user-profile img {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            margin-right: 10px;
-            object-fit: cover;
-        }
-
     </style>
 </head>
 <body>
-<!-- Navigation Bar -->
-<%--<%@include file="../component/navbar.jsp"%>--%>
-<nav class="navbar">
-    <a href="${pageContext.request.contextPath}/user" class="brand">
-        <span class="brand-logo"><i class="fas fa-book-reader"></i></span>
-        <span class="brand-text">eBook Store</span>
-    </a>
+<%@include file="../component/navbar.jsp"%>
 
-    <ul class="nav-links">
-        <li class="nav-item">
-            <a href="${pageContext.request.contextPath}/user" class="nav-link">
-                <i class="fas fa-home"></i> Home
-            </a>
-        </li>
-        <li class="nav-item">
-            <a href="BrowseBooksServlet" class="nav-link">
-                <i class="fas fa-book-open"></i> Browse Books
-            </a>
-        </li>
-        <li class="nav-item">
-            <a href="ViewCartServlet" class="nav-link">
-                <i class="fas fa-shopping-cart"></i> Cart
-            </a>
-        </li>
-        <li class="nav-item">
-            <a href="ViewOrdersServlet" class="nav-link">
-                <i class="fas fa-history"></i> My Orders
-            </a>
-        </li>
-    </ul>
-
-    <div class="user-profile">
-        <% if (loggedInUser != null) { %>
-        <span><i class="fas fa-user"></i> <%= loggedInUser.getName() %></span>
-        <a href="LogoutServlet" class="nav-link" style="margin-left: 1rem;">
-            <i class="fas fa-sign-out-alt"></i> Logout
-        </a>
-        <% } %>
-    </div>
-</nav>
 <!-- Main Content -->
-<div class="container">
+<main class="main-container">
+    <!-- Page Header -->
     <div class="page-header">
         <h1><i class="fas fa-book-open"></i> Browse Our Collection</h1>
-        <p>Find your next favorite book</p>
+        <p>Discover thousands of books across all genres. Find your next favorite read!</p>
     </div>
 
     <!-- Search Form -->
-    <form action="BrowseBooksServlet" method="get" class="search-bar">
-        <input type="text" name="search" class="search-input" placeholder="Search by title or author..." value="<%= searchQuery %>">
-        <button type="submit" class="search-button">
-            <i class="fas fa-search"></i>
-        </button>
-    </form>
+    <div class="search-container">
+        <form action="BrowseBooksServlet" method="get" class="search-form">
+            <input type="text" name="search" class="search-input"
+                   placeholder="Search by title, author, or genre..."
+                   value="<%= searchQuery %>">
+            <button type="submit" class="search-button">
+                <i class="fas fa-search"></i>
+            </button>
+        </form>
+    </div>
+
+    <!-- Filter Section -->
+    <div class="filter-section">
+        <div class="filter-group">
+            <span class="filter-label">Filter by:</span>
+            <select class="filter-select" id="categoryFilter">
+                <option value="all">All Categories</option>
+                <option value="Fiction">Fiction</option>
+                <option value="Non-Fiction">Non-Fiction</option>
+                <option value="Science">Science</option>
+                <option value="Technology">Technology</option>
+                <option value="Biography">Biography</option>
+            </select>
+        </div>
+        <div class="view-toggle">
+            <button class="view-btn active"><i class="fas fa-th"></i></button>
+            <button class="view-btn"><i class="fas fa-list"></i></button>
+        </div>
+    </div>
 
     <!-- Books Grid -->
     <% if (books != null && !books.isEmpty()) { %>
     <div class="books-grid">
         <% for (BookModel book : books) { %>
-        <div class="book-card">
-            <% if (book.getPhoto() != null && !book.getPhoto().isEmpty()) { %>
-            <img src="uploads/<%= book.getPhoto() %>" alt="<%= book.getBookName() %>" class="book-image">
-            <% } else { %>
-            <div style="height: 200px; background-color: #eee; display: flex; align-items: center; justify-content: center;">
-                <i class="fas fa-book" style="font-size: 3rem; color: #999;"></i>
+        <div class="book-card" data-category="<%= book.getCategory() != null ? book.getCategory() : "Uncategorized" %>">
+            <div class="book-image-container">
+                <% if (book.getPhoto() != null && !book.getPhoto().isEmpty()) { %>
+                <img src="uploads/<%= book.getPhoto() %>" alt="<%= book.getBookName() %>" class="book-image">
+                <% } else { %>
+                <div style="height: 100%; background: linear-gradient(135deg, rgba(67,97,238,0.1), rgba(72,149,239,0.2));
+                    display: flex; align-items: center; justify-content: center;">
+                    <i class="fas fa-book" style="font-size: 3rem; color: var(--primary);"></i>
+                </div>
+                <% } %>
+                <% if (book.getPrice() < 10) { %>
+                <span class="book-badge">Sale</span>
+                <% } %>
             </div>
-            <% } %>
             <div class="book-details">
                 <h3 class="book-title"><%= book.getBookName() %></h3>
                 <p class="book-author">By <%= book.getAuthor() %></p>
                 <p class="book-price">₹<%= String.format("%.2f", book.getPrice()) %></p>
                 <div class="book-actions">
-                    <a href="BookDetailsServlet?id=<%= book.getBookId() %>" class="btn btn-primary">
+                    <a href="BookDetailsServlet?id=<%= book.getBookId() %>" class="btn btn-details">
                         <i class="fas fa-info-circle"></i> Details
                     </a>
-                    <a href="AddToCartServlet?id=<%= book.getBookId() %>" class="btn btn-secondary">
-                        <i class="fas fa-cart-plus"></i> Add to Cart
+                    <a href="AddToCartServlet?id=<%= book.getBookId() %>" class="btn btn-cart">
+                        <i class="fas fa-cart-plus"></i> Add
                     </a>
                 </div>
             </div>
         </div>
         <% } %>
     </div>
-
-    <!-- Pagination -->
-    <div class="pagination">
-        <a href="#">&laquo;</a>
-        <a href="#" class="active">1</a>
-        <a href="#">2</a>
-        <a href="#">3</a>
-        <a href="#">&raquo;</a>
-    </div>
     <% } else { %>
+    <!-- No Books Message -->
     <div class="no-books">
-        <h3>No books found</h3>
-        <p>We couldn't find any books matching your search.</p>
-        <a href="BrowseBooksServlet" class="btn btn-primary" style="margin-top: 1rem;">
-            <i class="fas fa-book-open"></i> Browse All Books
+        <i class="fas fa-book-open"></i>
+        <h3>No Books Found</h3>
+        <p>We couldn't find any books matching your search. Try adjusting your filters or search term.</p>
+        <a href="BrowseBooksServlet" class="btn btn-cart" style="max-width: 250px; margin: 0 auto;">
+            <i class="fas fa-sync-alt"></i> Reset Search
         </a>
     </div>
     <% } %>
-</div>
+</main>
+
+<script>
+    // Initialize animations on scroll
+    const animateOnScroll = (entries, observer) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.opacity = 1;
+                entry.target.style.transform = 'translateY(0)';
+                observer.unobserve(entry.target);
+            }
+        });
+    };
+
+    const observer = new IntersectionObserver(animateOnScroll, {
+        threshold: 0.1
+    });
+
+    document.querySelectorAll('.book-card').forEach(card => {
+        observer.observe(card);
+    });
+
+    // View toggle functionality
+    const viewBtns = document.querySelectorAll('.view-btn');
+    const booksGrid = document.querySelector('.books-grid');
+
+    viewBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            viewBtns.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+
+            if (btn.querySelector('.fa-list')) {
+                booksGrid.classList.add('list-view');
+            } else {
+                booksGrid.classList.remove('list-view');
+            }
+        });
+    });
+
+    // Category filter functionality
+    document.getElementById('categoryFilter').addEventListener('change', function() {
+        const selectedCategory = this.value;
+        const bookCards = document.querySelectorAll('.book-card');
+        let visibleCount = 0;
+
+        bookCards.forEach(card => {
+            const cardCategory = card.getAttribute('data-category');
+
+            if (selectedCategory === 'all' || cardCategory === selectedCategory) {
+                card.style.display = 'block';
+                visibleCount++;
+            } else {
+                card.style.display = 'none';
+            }
+        });
+
+        // Show no books message if no cards are visible
+        const noBooksMessage = document.querySelector('.no-books');
+        if (visibleCount === 0 && !noBooksMessage) {
+            // Create a temporary no books message if none exists
+            const tempNoBooks = document.createElement('div');
+            tempNoBooks.className = 'no-books';
+            tempNoBooks.innerHTML = `
+                <i class="fas fa-book-open"></i>
+                <h3>No Books Found</h3>
+                <p>No books match the selected category filter.</p>
+                <button onclick="resetFilter()" class="btn btn-cart" style="max-width: 250px; margin: 0 auto;">
+                    <i class="fas fa-sync-alt"></i> Reset Filter
+                </button>
+            `;
+            booksGrid.parentNode.insertBefore(tempNoBooks, booksGrid.nextSibling);
+        } else if (noBooksMessage && visibleCount > 0) {
+            noBooksMessage.remove();
+        }
+    });
+
+    function resetFilter() {
+        document.getElementById('categoryFilter').value = 'all';
+        document.querySelectorAll('.book-card').forEach(card => {
+            card.style.display = 'block';
+        });
+        const tempNoBooks = document.querySelector('.no-books');
+        if (tempNoBooks) {
+            tempNoBooks.remove();
+        }
+    }
+</script>
 </body>
 </html>

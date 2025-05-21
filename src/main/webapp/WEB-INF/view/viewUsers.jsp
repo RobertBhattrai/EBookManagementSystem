@@ -9,11 +9,11 @@
 <%@ page import="models.UserModel" %>
 <%@ page import="java.util.List" %>
 <%
-    UserModel loggedInUser = (UserModel) session.getAttribute("loggedInUser");
-    if (loggedInUser == null || !"admin".equals(loggedInUser.getRole())) {
-        response.sendRedirect(request.getContextPath() + "/LoginServlet");
-        return;
-    }
+//    UserModel loggedInUser = (UserModel) session.getAttribute("loggedInUser");
+//    if (loggedInUser == null || !"admin".equals(loggedInUser.getRole())) {
+//        response.sendRedirect(request.getContextPath() + "/LoginServlet");
+//        return;
+//    }
 
     List<UserModel> users = (List<UserModel>) request.getAttribute("users");
 %>
@@ -30,16 +30,8 @@
             --light-color: #f8f9fa;
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-
         body {
             background-color: #f5f5f5;
-            padding: 20px;
         }
 
         .container {

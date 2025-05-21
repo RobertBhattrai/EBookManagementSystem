@@ -131,6 +131,7 @@
     </style>
 </head>
 <body>
+<%@ include file="admin/navbar.jsp" %>
 <div class="container">
     <div class="header">
         <h1><i class="fas fa-book"></i> Book Inventory</h1>

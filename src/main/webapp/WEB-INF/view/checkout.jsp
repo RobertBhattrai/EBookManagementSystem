@@ -10,11 +10,11 @@
 <%@ page import="models.UserModel" %>
 <%@ page import="java.util.List" %>
 <%
-    UserModel loggedInUser = (UserModel) session.getAttribute("loggedInUser");
-    if (loggedInUser == null) {
-        response.sendRedirect(request.getContextPath() + "/LoginServlet");
-        return;
-    }
+//    UserModel loggedInUser = (UserModel) session.getAttribute("loggedInUser");
+//    if (loggedInUser == null) {
+//        response.sendRedirect(request.getContextPath() + "/LoginServlet");
+//        return;
+//    }
 
     List<CartItem> cartItems = (List<CartItem>) request.getAttribute("cartItems");
     double totalPrice = (double) request.getAttribute("totalPrice");
@@ -215,44 +215,7 @@
 </head>
 <body>
 <!-- Navigation Bar -->
-<nav class="navbar">
-    <a href="${pageContext.request.contextPath}/user" class="brand">
-        <span class="brand-logo"><i class="fas fa-book-reader"></i></span>
-        <span class="brand-text">eBook Store</span>
-    </a>
-
-    <ul class="nav-links">
-        <li class="nav-item">
-            <a href="${pageContext.request.contextPath}/user" class="nav-link">
-                <i class="fas fa-home"></i> Home
-            </a>
-        </li>
-        <li class="nav-item">
-            <a href="BrowseBooksServlet" class="nav-link">
-                <i class="fas fa-book-open"></i> Browse Books
-            </a>
-        </li>
-        <li class="nav-item">
-            <a href="ViewCartServlet" class="nav-link">
-                <i class="fas fa-shopping-cart"></i> Cart
-            </a>
-        </li>
-        <li class="nav-item">
-            <a href="ViewOrdersServlet" class="nav-link">
-                <i class="fas fa-history"></i> My Orders
-            </a>
-        </li>
-    </ul>
-
-    <div class="user-profile">
-        <% if (loggedInUser != null) { %>
-        <span><i class="fas fa-user"></i> <%= loggedInUser.getName() %></span>
-        <a href="LogoutServlet" class="nav-link" style="margin-left: 1rem;">
-            <i class="fas fa-sign-out-alt"></i> Logout
-        </a>
-        <% } %>
-    </div>
-</nav>
+<%@include file="../component/navbar.jsp"%>
 
 <!-- Main Content -->
 <div class="container">

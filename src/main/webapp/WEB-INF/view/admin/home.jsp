@@ -1,177 +1,475 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: bhatt
-  Date: 4/29/2025
-  Time: 7:08 PM
-  To change this template use File | Settings | File Templates.
---%>
 <%@ page import="models.UserModel" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <%
-    UserModel loggedInUser = (UserModel) session.getAttribute("loggedInUser");
-
-    if (loggedInUser == null || !"admin".equals(loggedInUser.getRole())) {
-        response.sendRedirect(request.getContextPath() + "/LoginServlet");
-        return;
-    }
+    //    UserModel loggedInUser = (UserModel) session.getAttribute("loggedInUser");
+//
+//    if (loggedInUser == null || !"admin".equals(loggedInUser.getRole())) {
+//        response.sendRedirect(request.getContextPath() + "/LoginServlet");
+//        return;
+//    }
 %>
 
+<!DOCTYPE html>
 <html>
 <head>
-    <title>Admin Dashboard</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-</head>
-<style>
-    :root {
-        --primary-color: #3498db;
-        --secondary-color: #2ecc71;
-        --accent-color: #e74c3c;
-        --dark-color: #2c3e50;
-        --light-color: #ecf0f1;
-    }
-
-    * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    }
-
-    body {
-        background-color: #f5f5f5;
-    }
-
-    .admin-container {
-        max-width: 1200px;
-        margin: 2rem auto;
-        padding: 0 1rem;
-    }
-
-    .admin-header {
-        text-align: center;
-        margin-bottom: 2rem;
-    }
-
-    .admin-header h1 {
-        color: var(--dark-color);
-        margin-bottom: 0.5rem;
-    }
-
-    .admin-header p {
-        color: #7f8c8d;
-    }
-
-    .actions-container {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-        gap: 1.5rem;
-        margin-top: 2rem;
-    }
-
-    .action-card {
-        background: white;
-        border-radius: 8px;
-        padding: 1.5rem;
-        text-align: center;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
-        cursor: pointer;
-        text-decoration: none;
-        color: var(--dark-color);
-    }
-
-    .action-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-    }
-
-    .card-icon {
-        font-size: 2.5rem;
-        margin-bottom: 1rem;
-        display: inline-block;
-    }
-
-    .card-title {
-        font-size: 1.25rem;
-        margin-bottom: 0.5rem;
-        font-weight: 600;
-    }
-
-    .card-desc {
-        color: #7f8c8d;
-        font-size: 0.9rem;
-    }
-
-    /* Color coding for cards */
-    .add-book {
-        border-top: 4px solid var(--secondary-color);
-    }
-
-    .view-books {
-        border-top: 4px solid var(--primary-color);
-    }
-
-    .view-users {
-        border-top: 4px solid var(--accent-color);
-    }
-
-    .view-orders {
-        border-top: 4px solid #f39c12;
-    }
-
-    @media (max-width: 600px) {
-        .actions-container {
-            grid-template-columns: 1fr;
+    <title>Admin Dashboard | eBook Haven</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #4361ee;
+            --primary-light: #3a56d4;
+            --secondary: #4cc9f0;
+            --accent: #f72585;
+            --success: #4ade80;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --dark: #1e293b;
+            --light: #f8fafc;
+            --gray: #94a3b8;
+            --border-radius: 12px;
+            --shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+            --transition: all 0.3s ease;
         }
-    }
-</style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f1f5f9;
+            color: var(--dark);
+            line-height: 1.6;
+        }
+
+        .admin-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Admin Header */
+        .admin-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+        }
+
+        .admin-info h1 {
+            font-size: 1.8rem;
+            margin-bottom: 5px;
+            color: var(--dark);
+        }
+
+        .admin-info p {
+            color: var(--gray);
+            font-size: 0.95rem;
+        }
+
+        .admin-stats {
+            display: flex;
+            gap: 15px;
+        }
+
+        .stat-badge {
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            background: rgba(67, 97, 238, 0.1);
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Dashboard Grid */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        /* Quick Stats Cards */
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 20px;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+        }
+
+        .stat-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .stat-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        .stat-title {
+            font-size: 0.95rem;
+            color: var(--gray);
+            font-weight: 500;
+        }
+
+        .stat-value {
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .stat-change {
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .positive {
+            color: var(--success);
+        }
+
+        .negative {
+            color: var(--danger);
+        }
+
+        /* Action Cards */
+        .action-card {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 25px;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            text-decoration: none;
+            color: var(--dark);
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .action-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+        }
+
+        .action-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: var(--border-radius);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            color: white;
+        }
+
+        .action-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .action-desc {
+            color: var(--gray);
+            font-size: 0.95rem;
+            margin-bottom: 20px;
+            flex-grow: 1;
+        }
+
+        .action-link {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--primary);
+            font-weight: 500;
+            font-size: 0.95rem;
+        }
+
+        /* Color Variants */
+        .bg-primary {
+            background-color: var(--primary);
+        }
+
+        .bg-secondary {
+            background-color: var(--secondary);
+        }
+
+        .bg-accent {
+            background-color: var(--accent);
+        }
+
+        .bg-warning {
+            background-color: var(--warning);
+        }
+
+        .text-primary {
+            color: var(--primary);
+        }
+
+        .text-secondary {
+            color: var(--secondary);
+        }
+
+        .text-accent {
+            color: var(--accent);
+        }
+
+        .text-warning {
+            color: var(--warning);
+        }
+
+        /* Recent Activity */
+        .recent-activity {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 20px;
+            box-shadow: var(--shadow);
+        }
+
+        .section-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .activity-item {
+            display: flex;
+            gap: 15px;
+            padding: 15px 0;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .activity-item:last-child {
+            border-bottom: none;
+        }
+
+        .activity-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(67, 97, 238, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            flex-shrink: 0;
+        }
+
+        .activity-content {
+            flex-grow: 1;
+        }
+
+        .activity-title {
+            font-weight: 500;
+            margin-bottom: 5px;
+        }
+
+        .activity-time {
+            color: var(--gray);
+            font-size: 0.85rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .admin-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+
+            .admin-stats {
+                width: 100%;
+                justify-content: space-between;
+            }
+
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .stats-container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
 <body>
 <%@ include file="navbar.jsp" %>
 
-<h2>Welcome, Admin <%= loggedInUser.getName() %>!</h2>
-<p>Email: <%= loggedInUser.getEmail() %></p>
-<p>Role: <%= loggedInUser.getRole() %></p>
-
-
-<h3>Admin Actions</h3>
 <div class="admin-container">
+    <!-- Admin Header with Stats -->
     <div class="admin-header">
-        <h1>Admin Dashboard</h1>
-        <p>Manage your bookstore administration tasks</p>
+        <div class="admin-info">
+            <h1>Welcome Back, <%= loggedInUser.getName() %>!</h1>
+            <p>Manage your here.</p>
+        </div>
+        <div class="admin-stats">
+            <div class="stat-badge">
+                <i class="fas fa-user-shield"></i>
+                Administrator
+            </div>
+            <div class="stat-badge">
+                <i class="fas fa-calendar-day"></i>
+                <%= new java.text.SimpleDateFormat("MMMM d, yyyy").format(new java.util.Date()) %>
+            </div>
+        </div>
     </div>
 
-    <div class="actions-container">
-        <!-- Add Book Card -->
-        <a href="${pageContext.request.contextPath}/AddBookServlet" class="action-card add-book">
-            <div class="card-icon"><i class="fas fa-book-medical"></i></div>
-            <h3 class="card-title">Add Book</h3>
-            <p class="card-desc">Add new books to your collection</p>
+    <!-- Main Actions Grid -->
+    <div class="dashboard-grid">
+        <a href="${pageContext.request.contextPath}/AddBookServlet" class="action-card">
+            <div class="action-icon bg-primary">
+                <i class="fas fa-book-medical"></i>
+            </div>
+            <h3 class="action-title">Add New Book</h3>
+            <p class="action-desc">Add a new book to your store's collection with details like title, author, price, and category.</p>
+            <span class="action-link">
+                Go to Add Book <i class="fas fa-arrow-right"></i>
+            </span>
         </a>
 
-        <!-- View All Books Card -->
-        <a href="${pageContext.request.contextPath}/ViewAllBook" class="action-card view-books">
-            <div class="card-icon"><i class="fas fa-book-open"></i></div>
-            <h3 class="card-title">View All Books</h3>
-            <p class="card-desc">Browse and manage all books</p>
+        <a href="${pageContext.request.contextPath}/ViewAllBook" class="action-card">
+            <div class="action-icon bg-secondary">
+                <i class="fas fa-book-open"></i>
+            </div>
+            <h3 class="action-title">Manage Books</h3>
+            <p class="action-desc">View, edit, or remove books from your inventory. Update stock levels and pricing.</p>
+            <span class="action-link">
+                Manage Books <i class="fas fa-arrow-right"></i>
+            </span>
         </a>
 
-        <!-- View Users Card -->
-        <a href="${pageContext.request.contextPath}/ViewUserServlet" class="action-card view-users">
-            <div class="card-icon"><i class="fas fa-users"></i></div>
-            <h3 class="card-title">View Users</h3>
-            <p class="card-desc">Manage registered users</p>
+        <a href="${pageContext.request.contextPath}/ViewUserServlet" class="action-card">
+            <div class="action-icon bg-accent">
+                <i class="fas fa-user-cog"></i>
+            </div>
+            <h3 class="action-title">User Management</h3>
+            <p class="action-desc">View all registered users, manage roles, and handle user accounts.</p>
+            <span class="action-link">
+                Manage Users <i class="fas fa-arrow-right"></i>
+            </span>
         </a>
 
-        <!-- View Book Orders Card -->
-        <a href="${pageContext.request.contextPath}/AdminOrderServlet" class="action-card view-orders">
-            <div class="card-icon"><i class="fas fa-shopping-cart"></i></div>
-            <h3 class="card-title">View Book Orders</h3>
-            <p class="card-desc">View and manage customer orders</p>
+        <a href="${pageContext.request.contextPath}/AdminOrderServlet" class="action-card">
+            <div class="action-icon bg-warning">
+                <i class="fas fa-clipboard-list"></i>
+            </div>
+            <h3 class="action-title">Order Management</h3>
+            <p class="action-desc">View and process customer orders, update status, and handle returns.</p>
+            <span class="action-link">
+                View Orders <i class="fas fa-arrow-right"></i>
+            </span>
         </a>
+    </div>
+
+    <!-- Recent Activity Section -->
+    <div class="recent-activity">
+        <h3 class="section-title">
+            <i class="fas fa-clock"></i> Recent Activity
+        </h3>
+
+        <div class="activity-item">
+            <div class="activity-icon">
+                <i class="fas fa-book"></i>
+            </div>
+            <div class="activity-content">
+                <div class="activity-title">New book added: "The Midnight Library"</div>
+                <div class="activity-time">10 minutes ago</div>
+            </div>
+        </div>
+
+        <div class="activity-item">
+            <div class="activity-icon">
+                <i class="fas fa-shopping-cart"></i>
+            </div>
+            <div class="activity-content">
+                <div class="activity-title">New order #4582 placed by John Doe</div>
+                <div class="activity-time">35 minutes ago</div>
+            </div>
+        </div>
+
+        <div class="activity-item">
+            <div class="activity-icon">
+                <i class="fas fa-user"></i>
+            </div>
+            <div class="activity-content">
+                <div class="activity-title">New user registered: jane.smith@example.com</div>
+                <div class="activity-time">2 hours ago</div>
+            </div>
+        </div>
+
+        <div class="activity-item">
+            <div class="activity-icon">
+                <i class="fas fa-truck"></i>
+            </div>
+            <div class="activity-content">
+                <div class="activity-title">Order #4579 marked as shipped</div>
+                <div class="activity-time">5 hours ago</div>
+            </div>
+        </div>
     </div>
 </div>
 
+<script>
+    // You can add dynamic functionality here
+    document.addEventListener('DOMContentLoaded', function() {
+        // Example: Animate stats counting up
+        const statValues = document.querySelectorAll('.stat-value');
+
+        statValues.forEach(stat => {
+            const target = parseInt(stat.textContent.replace(/,/g, ''));
+            const duration = 2000;
+            const step = target / (duration / 16);
+            let current = 0;
+
+            const interval = setInterval(() => {
+                current += step;
+                if (current >= target) {
+                    clearInterval(interval);
+                    stat.textContent = target.toLocaleString();
+                } else {
+                    stat.textContent = Math.floor(current).toLocaleString();
+                }
+            }, 16);
+        });
+    });
+</script>
 </body>
 </html>
-

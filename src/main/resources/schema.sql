@@ -36,6 +36,7 @@ CREATE TABLE IF NOT EXISTS `cart` (
                                       CONSTRAINT `bookIdCart` FOREIGN KEY (`bookId`) REFERENCES `book` (`bookId`) ON DELETE CASCADE ON UPDATE CASCADE,
                                       CONSTRAINT `userIdCart` FOREIGN KEY (`userId`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 );
+drop table orderlist;
 
 CREATE TABLE IF NOT EXISTS `orderlist` (
                              `orderId` int NOT NULL AUTO_INCREMENT,
@@ -56,6 +57,8 @@ CREATE TABLE IF NOT EXISTS `orderlist` (
                              CONSTRAINT `orderUserId` FOREIGN KEY (`userId`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
+drop table ordercart;
+
 CREATE TABLE IF NOT EXISTS `ordercart` (
                                            `id` int NOT NULL AUTO_INCREMENT,
                                            `orderId` int NOT NULL,
@@ -72,17 +75,3 @@ CREATE TABLE IF NOT EXISTS `ordercart` (
 
 
 
-CREATE TABLE IF NOT EXISTS `shipping` (
-                            `id` int NOT NULL AUTO_INCREMENT,
-                            `userId` int NOT NULL,
-                            `name` varchar(30) DEFAULT NULL,
-                            `phone` varchar(20) DEFAULT NULL,
-                            `address1` varchar(30) DEFAULT NULL,
-                            `address2` varchar(30) DEFAULT NULL,
-                            `landmark` varchar(30) DEFAULT NULL,
-                            `city` varchar(30) DEFAULT NULL,
-                            `pincode` varchar(20) DEFAULT NULL,
-                            PRIMARY KEY (`id`),
-                            KEY `shipUserId` (`userId`),
-                            CONSTRAINT `shipUserId` FOREIGN KEY (`userId`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-);

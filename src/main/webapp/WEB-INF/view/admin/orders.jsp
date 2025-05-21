@@ -40,8 +40,7 @@
     </style>
 </head>
 <body>
-
-<%@ include file="../admin/navbar.jsp" %>
+<%@ include file="navbar.jsp" %>
 
 <div class="container mt-4">
     <h2 class="mb-4">Order Management</h2>
@@ -80,7 +79,6 @@
         <table class="table table-striped table-hover">
             <thead class="table-dark">
             <tr>
-                <th>ID</th>
                 <th>Order ID</th>
                 <th>Book Name</th>
                 <th>Author Name</th>
@@ -90,13 +88,13 @@
             </tr>
             </thead>
             <tbody>
-            <% if (cartList != null) {
+            <% if (cartList != null && orders != null) {
                 for (OrderCartModel cart : cartList) {
                     for (OrderModel order : orders) {
-                        if (true) {
+                        System.out.println(cart.getOrderId()+" "+order.getOrderId());
+                        if (cart.getOrderId() == order.getOrderId()) {
             %>
             <tr>
-                <td><%= cart.getId() %></td>
                 <td><%= cart.getOrderId() %></td>
                 <td><%= cart.getBookName() %></td>
                 <td><%= cart.getAuthorName() %></td>

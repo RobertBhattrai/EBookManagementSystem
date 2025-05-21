@@ -23,6 +23,7 @@
     </style>
 </head>
 <body>
+<%@ include file="navbar.jsp" %>
 <h2>Order Details - ID #${order.orderId}</h2>
 
 <table>
