@@ -86,6 +86,7 @@ public class OrderCartModel {
 
     // Safe getter for book
     public BookModel getBook() {
+        BookModel book = new BookModel();
         if (book == null) {
             // Optionally load the book here if needed
             throw new IllegalStateException("Book reference not initialized");

@@ -325,8 +325,6 @@
             </div>
         </div>
 
-
-        //for OrderCart
         <% for (CartItem item : cartItems) { %>
         <input type="hidden" name="bookIds" value="<%= item.getBook().getBookId() %>">
         <input type="hidden" name="bookNames" value="<%= item.getBook().getBookName() %>">

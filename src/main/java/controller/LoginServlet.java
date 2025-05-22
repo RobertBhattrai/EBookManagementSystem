@@ -40,9 +40,9 @@ public class LoginServlet extends HttpServlet {
                             // Redirect based on role
                             String role = user.getRole(); // Ensure this method exists in UserModel
                             if ("admin".equalsIgnoreCase(role)) {
-                                response.sendRedirect(request.getContextPath() + "/Admin-Dashboard");
+                                response.sendRedirect(request.getContextPath() + "/admin");
                             } else {
-                                response.sendRedirect(request.getContextPath() + "/User-Dashboard");
+                                response.sendRedirect(request.getContextPath() + "/user");
                             }
                             return;
                         }

@@ -36,14 +36,14 @@ CREATE TABLE IF NOT EXISTS `cart` (
                                       CONSTRAINT `bookIdCart` FOREIGN KEY (`bookId`) REFERENCES `book` (`bookId`) ON DELETE CASCADE ON UPDATE CASCADE,
                                       CONSTRAINT `userIdCart` FOREIGN KEY (`userId`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 );
-drop table orderlist;
+
 
 CREATE TABLE IF NOT EXISTS `orderlist` (
                              `orderId` int NOT NULL AUTO_INCREMENT,
                              `userId` int NOT NULL,
                              `time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
                              `price` int NOT NULL,
-                             `paymentMethod` varchar(10) NOT NULL,
+                             `paymentMethod` varchar(50) NOT NULL,
                              `status` varchar(10) NOT NULL DEFAULT 'No',
                              `name` varchar(30) DEFAULT NULL,
                              `phone` varchar(20) DEFAULT NULL,
@@ -57,7 +57,6 @@ CREATE TABLE IF NOT EXISTS `orderlist` (
                              CONSTRAINT `orderUserId` FOREIGN KEY (`userId`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
-drop table ordercart;
 
 CREATE TABLE IF NOT EXISTS `ordercart` (
                                            `id` int NOT NULL AUTO_INCREMENT,
