@@ -513,18 +513,13 @@
                     <td>₹<%= String.format("%.2f", item.getBook().getPrice()) %></td>
                     <td>
                         <div class="quantity-control">
-                            <button type="button" class="quantity-btn minus" data-book-id="<%= item.getBook().getBookId() %>">-</button>
                             <input type="number" name="quantity_<%= item.getBook().getBookId() %>"
                                    value="<%= item.getQuantity() %>" min="1" max="10" class="quantity-input">
-                            <button type="button" class="quantity-btn plus" data-book-id="<%= item.getBook().getBookId() %>">+</button>
                         </div>
                     </td>
                     <td>₹<%= String.format("%.2f", item.getBook().getPrice() * item.getQuantity()) %></td>
                     <td>
                         <div class="action-btns">
-                            <button type="submit" name="update" value="<%= item.getBook().getBookId() %>" class="update-btn">
-                                <i class="fas fa-sync-alt"></i> Update
-                            </button>
                             <button type="submit" formaction="RemoveFromCartServlet" name="bookId" value="<%= item.getBook().getBookId() %>" class="remove-btn">
                                 <i class="fas fa-trash-alt"></i> Remove
                             </button>
@@ -558,47 +553,5 @@
         <% } %>
     </div>
 </div>
-
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Handle plus/minus buttons
-        document.querySelectorAll('.quantity-btn').forEach(btn => {
-            btn.addEventListener('click', function() {
-                const bookId = this.getAttribute('data-book-id');
-                const input = document.querySelector(`input[name="quantity_${bookId}"]`);
-                let value = parseInt(input.value);
-
-                if (this.classList.contains('minus') && value > 1) {
-                    input.value = value - 1;
-                } else if (this.classList.contains('plus') && value < 10) {
-                    input.value = value + 1;
-                }
-
-                // Highlight the update button
-                const updateBtn = document.querySelector(`button[name="update"][value="${bookId}"]`);
-                updateBtn.style.backgroundColor = '#f39c12';
-                updateBtn.innerHTML = '<i class="fas fa-sync-alt"></i> Update Needed';
-            });
-        });
-
-        // Auto-update when quantity changes (optional)
-        document.querySelectorAll('.quantity-input').forEach(input => {
-            input.addEventListener('change', function() {
-                const bookId = this.name.split('_')[1];
-                const updateBtn = document.querySelector(`button[name="update"][value="${bookId}"]`);
-                updateBtn.style.backgroundColor = '#f39c12';
-                updateBtn.innerHTML = '<i class="fas fa-sync-alt"></i> Update Needed';
-            });
-        });
-
-        // Highlight all update buttons when form is submitted
-        document.getElementById('cartForm').addEventListener('submit', function() {
-            document.querySelectorAll('.update-btn').forEach(btn => {
-                btn.style.backgroundColor = '#3498db';
-                btn.innerHTML = '<i class="fas fa-sync-alt"></i> Updating...';
-            });
-        });
-    });
-</script>
 </body>
 </html>

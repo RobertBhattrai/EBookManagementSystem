@@ -272,11 +272,11 @@
                         Debit Card
                     </label>
                     <label class="payment-method">
-                        <input type="radio" name="paymentMethod" value="Net Banking">
+                        <input type="radio" name="paymentMethod" value="Net Banking" disabled>
                         Net Banking
                     </label>
                     <label class="payment-method">
-                        <input type="radio" name="paymentMethod" value="UPI">
+                        <input type="radio" name="paymentMethod" value="UPI" disabled>
                         UPI
                     </label>
                     <label class="payment-method">

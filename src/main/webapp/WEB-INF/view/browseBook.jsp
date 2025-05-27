@@ -434,7 +434,7 @@
                     <a href="BookDetailsServlet?id=<%= book.getBookId() %>" class="btn btn-details">
                         <i class="fas fa-info-circle"></i> Details
                     </a>
-                    <a href="AddToCartServlet?id=<%= book.getBookId() %>" class="btn btn-cart">
+                    <a href="BookDetailsServlet?id=<%= book.getBookId() %>" class="btn btn-cart">
                         <i class="fas fa-cart-plus"></i> Add
                     </a>
                 </div>

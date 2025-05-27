@@ -399,53 +399,6 @@
         </a>
     </div>
 
-    <!-- Recent Activity Section -->
-    <div class="recent-activity">
-        <h3 class="section-title">
-            <i class="fas fa-clock"></i> Recent Activity
-        </h3>
-
-        <div class="activity-item">
-            <div class="activity-icon">
-                <i class="fas fa-book"></i>
-            </div>
-            <div class="activity-content">
-                <div class="activity-title">New book added: "The Midnight Library"</div>
-                <div class="activity-time">10 minutes ago</div>
-            </div>
-        </div>
-
-        <div class="activity-item">
-            <div class="activity-icon">
-                <i class="fas fa-shopping-cart"></i>
-            </div>
-            <div class="activity-content">
-                <div class="activity-title">New order #4582 placed by John Doe</div>
-                <div class="activity-time">35 minutes ago</div>
-            </div>
-        </div>
-
-        <div class="activity-item">
-            <div class="activity-icon">
-                <i class="fas fa-user"></i>
-            </div>
-            <div class="activity-content">
-                <div class="activity-title">New user registered: jane.smith@example.com</div>
-                <div class="activity-time">2 hours ago</div>
-            </div>
-        </div>
-
-        <div class="activity-item">
-            <div class="activity-icon">
-                <i class="fas fa-truck"></i>
-            </div>
-            <div class="activity-content">
-                <div class="activity-title">Order #4579 marked as shipped</div>
-                <div class="activity-time">5 hours ago</div>
-            </div>
-        </div>
-    </div>
-</div>
 
 <script>
     // You can add dynamic functionality here

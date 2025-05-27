@@ -122,6 +122,8 @@
                     <% } else if (order.getStatus().equalsIgnoreCase("Processing")) { %>
                     <form action="AdminOrderServlet" method="post" class="d-inline">
                         <input type="hidden" name="orderId" value="<%= order.getOrderId() %>">
+                        <input type="hidden" name="bookId" value="<%= cart.getBookId()%>">
+                        <input type="hidden" name="bookName" value="<%= cart.getBookName()%>">
                         <input type="hidden" name="status" value="Completed">
                         <input type="hidden" name="currentStatus" value="<%= order.getStatus() %>">
                         <button type="submit" class="btn btn-sm btn-primary">

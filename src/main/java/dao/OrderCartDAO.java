@@ -50,19 +50,19 @@ public class OrderCartDAO {
 
 
     public static boolean addOrderCartItems(List<OrderCartModel> orderCartItems) {
-        String query = "INSERT INTO ordercart (orderId, bookName, authorName, quantity, price) " +
-                "VALUES (?, ?, ?, ?, ?)";
+        String query = "INSERT INTO ordercart (orderId, bookId, bookName, authorName, quantity, price) " +
+                "VALUES (?, ?, ?, ?, ?, ?)";
 
         try (Connection conn = getConnection();
              PreparedStatement ps = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
 
             for (OrderCartModel item : orderCartItems) {
                 ps.setInt(1, item.getOrderId());
-//                ps.setInt(2, item.getBookId());
-                ps.setString(2, item.getBookName());
-                ps.setString(3, item.getAuthorName());
-                ps.setInt(4, item.getQuantity());
-                ps.setDouble(5, item.getPrice());
+                ps.setInt(2, item.getBookId());
+                ps.setString(3, item.getBookName());
+                ps.setString(4, item.getAuthorName());
+                ps.setInt(5, item.getQuantity());
+                ps.setDouble(6, item.getPrice());
                 ps.addBatch();
             }
 
@@ -151,6 +151,7 @@ public class OrderCartDAO {
         return new OrderCartModel(
                 rs.getInt("id"),
                 rs.getInt("orderId"),
+                rs.getInt("bookId"),
                 rs.getString("bookName"),
                 rs.getString("authorName"),
                 rs.getInt("quantity"),

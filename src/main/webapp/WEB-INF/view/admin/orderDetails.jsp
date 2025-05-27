@@ -14,7 +14,7 @@
     <title>Order Details</title>
     <style>
         body {
-            font-family: Arial, sans-serif; padding: 20px; }
+            font-family: Arial, sans-serif;}
         table { border-collapse: collapse; width: 70%; margin: auto; }
         td, th { border: 1px solid #ddd; padding: 12px; }
         th { background-color: #f2f2f2; }

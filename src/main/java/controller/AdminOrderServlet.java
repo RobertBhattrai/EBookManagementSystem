@@ -80,7 +80,7 @@ public class AdminOrderServlet extends HttpServlet {
             System.out.println("Debugging");
             if (statusUpdated) {
                 // If changing from Pending to Processing, update book quantities
-                if (true) {
+                if (newStatus.equals("Processing")) {
                     // Get all cart items for this order
                     List<OrderCartModel> cartItems = OrderCartDAO.getCartsByOrderId(orderId);
                     System.out.println(cartItems);
